@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vibe Reminder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>🎤 Vibe Reminder</h1>
+
+    <!-- RECORD -->
+    <button id="recordBtn">⏺️ Record</button>
+    <p id="liveText">Say your task...</p>
+
+    <!-- TIMER OPTIONS -->
+    <div class="timers">
+      <button onclick="startTimer(10)">10s</button>
+      <button onclick="startTimer(15)">15s</button>
+      <button onclick="startTimer(20)">20s</button>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <h2 id="countdown"></h2>
+
+    <!-- DONE -->
+    <div id="doneScreen" class="hidden">
+      <h2>🚨 DONE</h2>
+      <p id="finalTask"></p>
+      <button onclick="stopAlarm()">✅ Finished</button>
+      <button onclick="startTimer(15)">⏳ +15s</button>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
