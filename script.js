@@ -1,40 +1,56 @@
 let recognition;
+let isRecording = false;
 let currentText = "";
 let timerInterval;
 let alarmAudio;
 
-// ---------- SPEECH ----------
+// ---------- ELEMENTS ----------
 const recordBtn = document.getElementById("recordBtn");
 const liveText = document.getElementById("liveText");
+const countdownEl = document.getElementById("countdown");
 
+// ---------- RECORD ----------
 recordBtn.onclick = () => {
-  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.continuous = true;
-  recognition.interimResults = true;
+  if (!isRecording) {
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = true;
+    recognition.interimResults = true;
 
-  recognition.onresult = (event) => {
-    let transcript = "";
-    for (let i = 0; i < event.results.length; i++) {
-      transcript += event.results[i][0].transcript;
-    }
-    currentText = transcript;
-    liveText.innerText = transcript;
-  };
+    recognition.onresult = (event) => {
+      let transcript = "";
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      currentText = transcript;
+      liveText.innerText = transcript;
+    };
 
-  recognition.start();
+    recognition.start();
+    recordBtn.innerText = "Stop Recording";
+    isRecording = true;
+
+  } else {
+    recognition.stop();
+    recordBtn.innerText = "Start Recording";
+    isRecording = false;
+  }
 };
 
 // ---------- TIMER ----------
-const countdownEl = document.getElementById("countdown");
-const doneScreen = document.getElementById("doneScreen");
-const finalTask = document.getElementById("finalTask");
-
 function startTimer(seconds) {
-  clearInterval(timerInterval);
+  if (!currentText) {
+    alert("Please record a reminder first");
+    return;
+  }
+
+  const confirmSet = confirm(`Set reminder for ${seconds} seconds?`);
+  if (!confirmSet) return;
+
+  // RESET UI after confirmation
+  resetUI();
 
   let remaining = seconds;
   countdownEl.innerText = remaining;
-  doneScreen.classList.add("hidden");
 
   timerInterval = setInterval(() => {
     remaining--;
@@ -47,11 +63,16 @@ function startTimer(seconds) {
   }, 1000);
 }
 
+// ---------- RESET ----------
+function resetUI() {
+  liveText.innerText = "Say your task...";
+  currentText = "";
+  countdownEl.innerText = "";
+}
+
 // ---------- ALARM ----------
 function triggerAlarm() {
-  finalTask.innerText = currentText || "Your task";
-
-  doneScreen.classList.remove("hidden");
+  showNotification(currentText);
 
   alarmAudio = new Audio("https://www.soundjay.com/buttons/beep-01a.mp3");
   alarmAudio.loop = true;
@@ -63,11 +84,41 @@ function triggerAlarm() {
   });
 }
 
+// ---------- STOP ----------
 function stopAlarm() {
   if (alarmAudio) {
     alarmAudio.pause();
     alarmAudio.currentTime = 0;
   }
-  doneScreen.classList.add("hidden");
-  countdownEl.innerText = "";
+  removeNotification();
+}
+
+// ---------- REMIND LATER ----------
+function remindLater() {
+  stopAlarm();
+  startTimer(15);
+}
+
+// ---------- NOTIFICATION ----------
+function showNotification(text) {
+  removeNotification();
+
+  const notif = document.createElement("div");
+  notif.id = "notification";
+
+  notif.innerHTML = `
+    <div class="notif-title">Reminder</div>
+    <div class="notif-text">${text || "Your task"}</div>
+    <div class="notif-actions">
+      <button onclick="stopAlarm()">Done</button>
+      <button onclick="remindLater()">Remind later</button>
+    </div>
+  `;
+
+  document.body.appendChild(notif);
+}
+
+function removeNotification() {
+  const existing = document.getElementById("notification");
+  if (existing) existing.remove();
 }
