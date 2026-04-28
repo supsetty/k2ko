@@ -1,3 +1,43 @@
+body {
+  margin: 0;
+  background: #0A0A0A;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.container {
+  padding: 40px;
+}
+
+h1 {
+  color: #FF4B4B;
+}
+
+button {
+  background: #FF4B4B;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+#countdown {
+  font-size: 80px;
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
 #notification {
   position: fixed;
   top: 20px;
