@@ -1,39 +1,27 @@
-body {
-  margin: 0;
-  background: #0A0A0A;
+#notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
   color: white;
-  font-family: sans-serif;
-  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  width: 300px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  z-index: 999;
 }
 
-.container {
-  padding: 40px;
+.notif-title {
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
-h1 {
-  color: #FF4B4B;
-}
-
-button {
-  background: #FF4B4B;
-  border: none;
-  color: white;
-  padding: 12px 20px;
-  margin: 10px;
-  border-radius: 30px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
+.notif-text {
+  margin-bottom: 15px;
   opacity: 0.8;
 }
 
-#countdown {
-  font-size: 80px;
-  margin-top: 20px;
-}
-
-.hidden {
-  display: none;
+.notif-actions button {
+  margin-right: 10px;
 }
